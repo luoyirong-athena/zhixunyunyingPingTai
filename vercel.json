@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "client",
+  "rewrites": [
+    { "source": "/mobile", "destination": "/mobile/index.html" },
+    { "source": "/mobile/", "destination": "/mobile/index.html" },
+    { "source": "/mobile/login", "destination": "/mobile/login.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/password", "destination": "/password.html" }
+  ]
+}

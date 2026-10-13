@@ -193,7 +193,37 @@ H5 独立登录页：<http://localhost:3317/mobile/login.html>
 |---|---|
 | `demo` | `demo123` |
 
-## 八、公开仓库与数据说明
+## 八、Vercel + Railway 部署
+
+当前项目采用前后端分离部署：Vercel 托管静态网页版和 H5，Railway 托管 Express API、SQLite 数据和后台任务。这样不改变现有页面和业务逻辑，也避免把 SQLite 和常驻 Node 进程直接放入 Vercel Serverless Function。
+
+### Vercel
+
+仓库已经包含 `vercel.json`，会将 `client/` 作为静态输出目录，并保留以下入口：
+
+- 网页版：`/`
+- H5 工作台：`/mobile/`
+- H5 登录页：`/mobile/login.html`
+
+在 Vercel 项目中设置环境变量：
+
+```text
+RAILWAY_API_URL=https://你的 Railway 服务域名
+```
+
+构建时会生成前端运行配置，所有现有 `/api` 请求、文件上传和实时同步请求会自动指向 Railway。
+
+### Railway
+
+Railway 服务需要允许 Vercel 域名跨域访问，在变量中设置：
+
+```text
+CORS_ORIGIN=https://你的 Vercel 域名
+```
+
+如果同时使用多个预览域名，可以用英文逗号分隔多个来源。Railway 仍应使用原项目的启动命令，并为 `server/data` 配置持久化存储。
+
+## 九、公开仓库与数据说明
 
 - 仓库不包含真实客户数据库、客户证据图片、上传资料和运行日志。
 - 所有演示客户、联系方式、账号、聊天记录和业务内容均为虚构数据。

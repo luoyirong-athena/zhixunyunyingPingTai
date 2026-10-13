@@ -5,6 +5,20 @@
 (function () {
   const TOKEN_KEY = 'zhixun_token';
   const USER_KEY = 'zhixun_user';
+  const runtimeConfig = window.__ZHIXUN_RUNTIME_CONFIG__ || {};
+  const apiBase = String(runtimeConfig.apiBase || window.ZHIXUN_API_BASE || '').trim().replace(/\/+$/, '');
+  const nativeFetch = typeof window.fetch === 'function' ? window.fetch.bind(window) : null;
+
+  function resolveApiUrl(input) {
+    const raw = input instanceof Request ? input.url : String(input);
+    if (!apiBase || !/^\/api(?:\/|$)/.test(raw)) return input;
+    const target = `${apiBase}${raw}`;
+    return input instanceof Request ? new Request(target, input) : target;
+  }
+
+  // Preserve relative API calls while allowing Vercel to call the Railway API.
+  if (nativeFetch) window.fetch = (input, options) => nativeFetch(resolveApiUrl(input), options);
+  window.ZhiXunApi = { baseUrl: apiBase, resolveUrl: resolveApiUrl };
   // Some isolated runtimes (for example backup verification) provide only a
   // partial Location object. Treat absent fields as an ordinary web entry.
   const locationPath = String(window.location?.pathname || '');
@@ -13,6 +27,7 @@
   const loginPath = mobileEntry ? '/mobile/login.html' : '/login.html';
 
   window.ZhiXunAuth = {
+    resolveUrl: resolveApiUrl,
     // 获取存储的 token
     getToken() {
       return localStorage.getItem(TOKEN_KEY);
