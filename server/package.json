@@ -12,6 +12,7 @@
     "test:dashboard-history": "node scripts/test-dashboard-history.js",
     "test:import-batches": "node scripts/test-import-batches.js",
     "test:sync-queue": "node scripts/test-sync-queue.js",
+    "test:ai-customer-parser": "node scripts/test-ai-customer-parser.js",
     "test:knowledge-relations": "node scripts/test-knowledge-relations.js",
     "test:priority-customers": "node scripts/test-priority-customers.js",
     "test:business-data-reset": "node scripts/test-business-data-reset.js",

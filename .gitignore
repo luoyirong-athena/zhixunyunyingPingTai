@@ -13,6 +13,8 @@ server/data/backups/
 # 环境变量文件
 .env
 .env.*
+!.env.example
+!server/.env.example
 
 # 日志
 *.log
