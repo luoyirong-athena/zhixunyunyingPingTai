@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "志询CRM - 抖音客户采集",
+  "version": "1.0",
+  "description": "在抖音用户主页一键提取客户信息到志询CRM",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["*://*.douyin.com/*", "http://localhost:*/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://*.douyin.com/user/*"],
+      "js": ["content.js"],
+      "css": ["style.css"]
+    }
+  ],
+  "action": {
+    "default_title": "志询CRM采集",
+    "default_popup": "popup.html"
+  },
+  "icons": {}
+}

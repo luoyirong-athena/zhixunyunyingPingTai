@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>个人中心 · 志询增长运营平台</title>
+  <link rel="icon" type="image/png" href="./assets/zx-browser-icon.png" />
+  <link rel="apple-touch-icon" href="./assets/zx-browser-icon-180.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      min-height: 100vh;
+      background-color: #d9efff;
+      background-image:
+        linear-gradient(135deg, rgba(225, 244, 255, .42) 0%, rgba(135, 205, 244, .18) 48%, rgba(75, 137, 220, .3) 100%),
+        url('./assets/login-mountain-ice.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(249, 253, 255, .18) 0%, rgba(116, 199, 245, .06) 52%, rgba(49, 94, 251, .12) 100%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(ellipse at center, rgba(255,255,255,.44) 0%, rgba(236,248,255,.26) 42%, transparent 72%),
+        radial-gradient(ellipse at center, rgba(255,255,255,.36) 0%, rgba(220,241,255,.18) 46%, transparent 74%),
+        radial-gradient(ellipse at center, rgba(245,252,255,.34) 0%, rgba(206,235,255,.16) 44%, transparent 73%);
+      background-repeat: no-repeat;
+      background-size: 48vw 16vh, 38vw 13vh, 44vw 15vh;
+      background-position: -18vw 16vh, 34vw 8vh, 86vw 27vh;
+      filter: blur(20px);
+      opacity: .6;
+      will-change: background-position;
+      animation: cloud-drift 42s ease-in-out infinite alternate;
+    }
+    @keyframes cloud-drift {
+      from { background-position: -18vw 16vh, 34vw 8vh, 86vw 27vh; }
+      to { background-position: 12vw 17vh, 58vw 10vh, 112vw 25vh; }
+    }
+
+    .profile-container {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 560px;
+    }
+
+    /* 顶部标题与导航 */
+    .page-heading {
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .page-title {
+      color: #163b66;
+      font-size: 30px;
+      line-height: 1.2;
+      font-weight: 750;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 16px rgba(255,255,255,.55);
+    }
+    .top-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .back-link {
+      color: #315f90; text-decoration: none;
+    }
+    .top-action {
+      min-width: 0;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid rgba(49,94,251,.16);
+      border-radius: 10px;
+      background: rgba(239,248,255,.58);
+      color: #315f90;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(49,94,251,.08), inset 0 1px 0 rgba(255,255,255,.7);
+      transition: all .25s;
+    }
+    .top-action:hover, .top-action:focus-visible {
+      color: #214dc8;
+      border-color: rgba(49,94,251,.32);
+      background: rgba(248,252,255,.78);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .top-action.is-active {
+      background: linear-gradient(135deg, rgba(49,94,251,.92), rgba(126,175,255,.92));
+      border-color: rgba(49,94,251,.35);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(49,94,251,.22);
+    }
+    .top-action.logout-link {
+      color: #d64b55;
+      border-color: rgba(239,68,68,.18);
+      background: rgba(255,244,245,.56);
+    }
+    .top-action.logout-link:hover, .top-action.logout-link:focus-visible {
+      color: #b4232c;
+      border-color: rgba(239,68,68,.3);
+      background: rgba(255,248,248,.78);
+    }
+
+    /* 卡片 */
+    .card {
+      background: linear-gradient(145deg, rgba(247, 252, 255, .72), rgba(210, 235, 255, .5));
+      backdrop-filter: blur(22px) saturate(120%);
+      -webkit-backdrop-filter: blur(22px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, .76);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 24px 70px rgba(30, 91, 153, .2), inset 0 1px 0 rgba(255,255,255,.82);
+    }
+    #infoCard {
+      padding-top: 36px;
+      padding-bottom: 36px;
+    }
+    .password-card[hidden] { display: none; }
+    .password-card .btn-return-profile {
+      width: 100%;
+      margin-top: 10px;
+      background: rgba(239,248,255,.54);
+      color: #456f9b;
+      border: 1px solid rgba(49,94,251,.13);
+    }
+    .password-card .btn-return-profile:hover,
+    .password-card .btn-return-profile:focus-visible {
+      color: #214dc8;
+      border-color: rgba(49,94,251,.28);
+      background: rgba(248,252,255,.76);
+      outline: none;
+    }
+
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 1px solid rgba(49, 94, 251, .12);
+    }
+
+    .avatar-circle {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #214dc8, #315efb 58%, #83baff);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: #fff; font-weight: 700;
+      box-shadow: 0 8px 28px rgba(49, 94, 251, .3), inset 0 1px 0 rgba(255,255,255,.26);
+      flex-shrink: 0;
+    }
+    .profile-avatar {
+      position: relative; overflow: hidden; cursor: pointer;
+      background: #315efb;
+    }
+    .profile-avatar img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      display: none;
+    }
+    .profile-avatar.has-image img { display: block; }
+    .profile-avatar.has-image #avatarLetter { display: none; }
+    .avatar-upload-mask {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(22, 66, 119, .72);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .profile-avatar:hover .avatar-upload-mask,
+    .profile-avatar:focus-visible .avatar-upload-mask { opacity: 1; }
+    .profile-avatar:focus-visible { outline: 2px solid #315efb; outline-offset: 3px; }
+    .avatar-action {
+      margin-top: 5px; padding: 0; border: none; background: none;
+      color: #315efb; font-size: 12px; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .avatar-action:hover { color: #214dc8; }
+    .avatar-action:disabled { color: #7f9ab5; cursor: wait; }
+
+    .card-title {
+      font-size: 18px; font-weight: 700; color: #163b66;
+    }
+    .card-subtitle {
+      font-size: 12px; color: #6685a5; margin-top: 2px;
+    }
+
+    /* 信息行 */
+    .info-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(49, 94, 251, .09);
+    }
+    .info-row:last-child { border-bottom: none; }
+
+    .info-label {
+      font-size: 13px; color: #607f9f; min-width: 70px;
+    }
+    .info-value {
+      font-size: 14px; color: #244f7c; text-align: right;
+      flex: 1; margin-left: 12px;
+    }
+    .info-value input {
+      width: 100%; height: 36px; padding: 0 12px;
+      background: rgba(255, 255, 255, .58);
+      border: 1px solid rgba(49, 94, 251, .16);
+      border-radius: 8px; font-size: 14px; color: #173b68;
+      outline: none; text-align: right;
+      transition: all 0.25s;
+    }
+    .info-value input:focus {
+      border-color: #6c9cff;
+      box-shadow: 0 0 0 3px rgba(49, 94, 251, .12);
+    }
+
+    /* 按钮 */
+    .btn {
+      height: 42px; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      letter-spacing: 0.5px; transition: all 0.3s;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 0 20px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #214dc8, #315efb 58%, #7eafff);
+      color: #fff; width: 100%;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(49, 94, 251, .34);
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-sm { height: 32px; font-size: 12px; padding: 0 14px; }
+    .profile-actions {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px; margin-top: 16px;
+    }
+    .profile-actions .btn {
+      width: 100%; min-width: 0; padding: 0 8px;
+      white-space: nowrap;
+      background: linear-gradient(145deg, rgba(248,252,255,.68), rgba(220,239,255,.5));
+      color: #456f9b; border: 1px solid rgba(49,94,251,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 4px 12px rgba(49,94,251,.06);
+    }
+    .profile-actions .btn:hover, .profile-actions .btn:focus-visible {
+      color: #214dc8;
+      border-color: rgba(49,94,251,.3);
+      background: rgba(248,252,255,.82);
+      box-shadow: 0 6px 16px rgba(49,94,251,.12);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .form-hint {
+      margin-top: -8px; color: #6685a5;
+      font-size: 12px; line-height: 1.6;
+    }
+
+    .btn .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    .btn.loading .spinner { display: inline-block; }
+    .btn.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 表单组 */
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 500;
+      color: #315f90; margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%; height: 44px;
+      padding: 0 14px;
+      background: rgba(255, 255, 255, .62);
+      border: 1px solid rgba(49, 94, 251, .16);
+      border-radius: 10px; font-size: 14px; color: #173b68;
+      outline: none; transition: all 0.25s;
+    }
+    .form-group input::placeholder { color: #7892ad; }
+    .form-group input:focus {
+      border-color: #6c9cff;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 0 0 0 4px rgba(49, 94, 251, .12);
+    }
+    .password-input-wrap { position: relative; }
+    .password-input-wrap input { padding-right: 48px; }
+    .password-toggle {
+      position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+      width: 34px; height: 34px; display: inline-flex; align-items: center;
+      justify-content: center; border: 0; border-radius: 9px;
+      color: #6786a6; background: transparent; cursor: pointer;
+    }
+    .password-toggle:hover, .password-toggle:focus-visible {
+      color: #315efb; background: rgba(49, 94, 251, .09); outline: none;
+    }
+    .password-toggle svg {
+      width: 18px; height: 18px; stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .password-toggle .eye-off { display: none; }
+    .password-toggle.is-visible .eye { display: none; }
+    .password-toggle.is-visible .eye-off { display: block; }
+    .password-rules {
+      margin-top: 9px; padding: 10px 11px; border-radius: 9px;
+      background: rgba(218, 238, 255, .46); border: 1px solid rgba(49, 94, 251, .12);
+      color: #607f9f; font-size: 12px; line-height: 1.6;
+    }
+    .password-rules-title { color: #315f90; margin-bottom: 4px; }
+    .password-rule { display: inline-flex; align-items: center; margin-right: 12px; color: #607f9f; }
+    .password-rule::before { content: '○'; margin-right: 4px; color: #7892ad; }
+    .password-rule.is-valid { color: #16724a; }
+    .password-rule.is-valid::before { content: '✓'; color: #16965c; }
+    .password-rule.is-invalid { color: #b4233c; }
+    .password-rule.is-invalid::before { content: '×'; color: #d13b53; }
+    .password-feedback { margin-top: 7px; font-size: 12px; line-height: 1.5; }
+    .password-feedback.is-valid { color: #16724a; }
+    .password-feedback.is-invalid { color: #b4233c; }
+
+    /* 提示 */
+    .toast {
+      padding: 10px 16px; border-radius: 10px; font-size: 13px;
+      margin-bottom: 16px; display: none; text-align: center;
+    }
+    .toast.show { display: block; }
+    .toast.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+    .toast.success {
+      background: rgba(229, 249, 239, .82);
+      border: 1px solid rgba(22, 150, 92, .24);
+      color: #126c45;
+    }
+
+    .card + .card .avatar-circle {
+      background: linear-gradient(135deg, #214dc8, #315efb 58%, #83baff) !important;
+    }
+    #editNameArea, #editHintArea, #editGreetingArea {
+      border-top-color: rgba(49, 94, 251, .12) !important;
+    }
+    #editHintArea label span { color: #6685a5 !important; }
+    #btnCancelName, #btnCancelHint, #btnCancelGreeting {
+      background: rgba(239, 248, 255, .54) !important;
+      color: #456f9b !important;
+      border-color: rgba(49, 94, 251, .13) !important;
+    }
+    @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
+
+    /* 响应式 */
+    @media (max-width: 480px) {
+      .page-title { font-size: 26px; }
+      .top-bar { gap: 7px; }
+      .top-action { padding: 0 7px; font-size: 12px; }
+      .card { padding: 24px 20px; border-radius: 16px; }
+      .profile-container { max-width: 100%; }
+    }
+    /* Used only when the H5 shell opens the profile action. */
+    body.zx-mobile-profile {
+      min-height: 100svh;
+      align-items: flex-start;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+      background-attachment: scroll;
+    }
+    body.zx-mobile-profile .profile-container { width: min(100%, 460px); }
+    body.zx-mobile-profile .page-heading { margin-bottom: 16px; }
+    body.zx-mobile-profile .page-title { font-size: clamp(24px, 7vw, 28px); }
+    body.zx-mobile-profile .top-bar { margin-top: 14px; gap: 6px; }
+    body.zx-mobile-profile .top-action { min-height: 40px; height: auto; padding: 7px 4px; font-size: 12px; text-align: center; }
+    body.zx-mobile-profile .card { padding: clamp(18px, 6vw, 24px); border-radius: 16px; margin-bottom: 14px; }
+    body.zx-mobile-profile #infoCard { padding-top: clamp(22px, 7vw, 28px); padding-bottom: clamp(22px, 7vw, 28px); }
+    body.zx-mobile-profile .card-header { margin-bottom: 18px; padding-bottom: 14px; }
+    body.zx-mobile-profile .info-row { padding: 10px 0; }
+    body.zx-mobile-profile .profile-actions { gap: 6px; margin-top: 14px; }
+    body.zx-mobile-profile .profile-actions .btn { height: 34px; padding: 0 4px; font-size: 11px; }
+  </style>
+</head>
+<body>
+
+<div class="profile-container">
+  <!-- 顶部标题与导航 -->
+  <div class="page-heading">
+    <h1 class="page-title">个人中心</h1>
+    <div class="top-bar">
+      <a href="/" class="top-action back-link" id="homeLink">
+      返回首页
+      </a>
+      <button type="button" class="top-action" id="btnShowPassword">修改密码</button>
+      <button type="button" class="top-action logout-link" id="btnLogout">退出登录</button>
+    </div>
+  </div>
+
+  <!-- 错误/成功提示 -->
+  <div class="toast error" id="toastError"></div>
+  <div class="toast success" id="toastSuccess"></div>
+
+  <!-- 个人信息卡片 -->
+  <div class="card" id="infoCard">
+    <div class="card-header">
+      <label class="avatar-circle profile-avatar" id="avatarPicker" for="avatarInput" tabindex="0" title="上传自定义头像">
+        <span id="avatarLetter">?</span>
+        <img id="avatarImage" alt="用户头像" />
+        <span class="avatar-upload-mask" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 4h-5L7.8 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.8l-1.7-2z"/>
+            <circle cx="12" cy="12.5" r="3"/>
+          </svg>
+        </span>
+      </label>
+      <input type="file" id="avatarInput" accept="image/jpeg,image/png,image/webp" hidden />
+      <div>
+        <div class="card-title" id="displayNameTitle">---</div>
+        <button type="button" class="avatar-action" id="btnChooseAvatar">上传头像</button>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">用户名</span>
+      <span class="info-value" id="infoUsername">---</span>
+    </div>
+    <div class="info-row" id="rowDisplayName">
+      <span class="info-label">显示名称</span>
+      <span class="info-value" id="infoDisplayName">---</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">密码提示</span>
+      <span class="info-value" id="infoPasswordHint">未设置</span>
+    </div>
+    <!-- 编辑显示名称（默认隐藏） -->
+    <div id="editNameArea" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06);">
+      <div class="form-group">
+        <label>显示名称</label>
+        <input type="text" id="inputDisplayName" placeholder="输入新的显示名称" maxlength="20" />
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary btn-sm" id="btnSaveName" style="flex:1;">
+          <span class="spinner"></span><span class="btn-text">保存</span>
+        </button>
+        <button class="btn btn-sm" id="btnCancelName" style="flex:0; background:rgba(255,255,255,0.06); color:#94a3b8; border:1px solid rgba(255,255,255,0.08);">
+          取消
+        </button>
+      </div>
+    </div>
+
+    <!-- 编辑密码提示（默认隐藏） -->
+    <div id="editHintArea" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06);">
+      <div class="form-group">
+        <label>密码提示 <span style="color:#64748b;font-weight:400;">（可选）</span></label>
+        <input type="text" id="inputPasswordHint" placeholder="例如：常用短语加年份" maxlength="80" />
+      </div>
+      <div class="form-hint">提示会在登录页输入用户名后显示，请勿填写真实密码。</div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="btn btn-primary btn-sm" id="btnSaveHint" style="flex:1;">
+          <span class="spinner"></span><span class="btn-text">保存提示</span>
+        </button>
+        <button class="btn btn-sm" id="btnCancelHint" style="flex:0; background:rgba(255,255,255,0.06); color:#94a3b8; border:1px solid rgba(255,255,255,0.08);">
+          取消
+        </button>
+      </div>
+    </div>
+
+    
+    <!-- 编辑首页问候语（默认隐藏） -->
+    <div id="editGreetingArea" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06);">
+      <div class="form-group">
+        <label>首页问候语</label>
+        <input type="text" id="inputGreeting" placeholder="例如：欢迎回来，早上好！" maxlength="80" />
+      </div>
+      <div class="form-hint">这句话会显示在首页总览的顶部。</div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="btn btn-primary btn-sm" id="btnSaveGreeting" style="flex:1;">
+          <span class="spinner"></span><span class="btn-text">保存问候语</span>
+        </button>
+        <button class="btn btn-sm" id="btnCancelGreeting" style="flex:0; background:rgba(255,255,255,0.06); color:#94a3b8; border:1px solid rgba(255,255,255,0.08);">
+          取消
+        </button>
+      </div>
+    </div>
+
+<div class="profile-actions" id="profileActions">
+      <button class="btn btn-sm" id="btnEditName">
+        编辑名称
+      </button>
+      <button class="btn btn-sm" id="btnEditGreeting">
+        首页问候语
+      </button>
+      <button class="btn btn-sm" id="btnEditHint">
+        密码提示
+      </button>
+    </div>
+  </div>
+
+  <!-- 修改密码卡片 -->
+  <div class="card password-card" id="passwordCard" hidden>
+    <div class="card-header">
+      <div class="avatar-circle" style="background:linear-gradient(135deg, #214dc8, #315efb 58%, #83baff);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="card-title">修改密码</div>
+      </div>
+    </div>
+
+    <form id="passwordForm">
+      <div class="form-group">
+        <label>旧密码</label>
+        <div class="password-input-wrap"><input type="password" id="oldPassword" autocomplete="current-password" /><button type="button" class="password-toggle" data-password-toggle="oldPassword" aria-label="显示旧密码" title="显示旧密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+      </div>
+      <div class="form-group">
+        <label>新密码</label>
+        <div class="password-input-wrap"><input type="password" id="newPassword" autocomplete="new-password" /><button type="button" class="password-toggle" data-password-toggle="newPassword" aria-label="显示新密码" title="显示新密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <div class="password-rules" id="changePasswordRules" aria-live="polite"><span class="password-rule" data-change-password-rule="length">至少8位</span><span class="password-rule" data-change-password-rule="categories">四类中至少两类</span><div class="password-feedback" id="changePasswordFeedback"></div></div>
+      </div>
+      <div class="form-group">
+        <label>确认新密码</label>
+        <div class="password-input-wrap"><input type="password" id="confirmPassword" autocomplete="new-password" /><button type="button" class="password-toggle" data-password-toggle="confirmPassword" aria-label="显示确认密码" title="显示确认密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <div class="password-feedback" id="changeConfirmFeedback" aria-live="polite"></div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="btnChangePassword">
+        <span class="spinner"></span>
+        <span class="btn-text">修改密码</span>
+      </button>
+      <button type="button" class="btn btn-return-profile" id="btnReturnProfile">返回个人资料</button>
+    </form>
+  </div>
+</div>
+
+<script src="./auth-helper.js?v=3"></script>
+<script>
+(function() {
+  const mobileProfile = new URLSearchParams(window.location.search).get('from') === 'mobile';
+  const profileHome = mobileProfile ? '/mobile/#/dashboard' : '/';
+  const profileLogin = mobileProfile ? '/mobile/login.html' : '/login.html';
+  if (mobileProfile) {
+    document.body.classList.add('zx-mobile-profile');
+    document.getElementById('homeLink').href = profileHome;
+  }
+  // ====== 认证检查 ======
+  if (!ZhiXunAuth.isAuthenticated()) {
+    window.location.href = profileLogin;
+    return;
+  }
+
+  // ====== DOM 引用 ======
+  const avatarPicker = document.getElementById('avatarPicker');
+  const avatarLetter = document.getElementById('avatarLetter');
+  const avatarImage = document.getElementById('avatarImage');
+  const avatarInput = document.getElementById('avatarInput');
+  const btnChooseAvatar = document.getElementById('btnChooseAvatar');
+  const displayNameTitle = document.getElementById('displayNameTitle');
+  const infoUsername = document.getElementById('infoUsername');
+  const infoDisplayName = document.getElementById('infoDisplayName');
+  const infoPasswordHint = document.getElementById('infoPasswordHint');
+  const toastError = document.getElementById('toastError');
+  const toastSuccess = document.getElementById('toastSuccess');
+  const editNameArea = document.getElementById('editNameArea');
+  const inputDisplayName = document.getElementById('inputDisplayName');
+  const btnEditName = document.getElementById('btnEditName');
+  const btnSaveName = document.getElementById('btnSaveName');
+  const btnCancelName = document.getElementById('btnCancelName');
+  const profileActions = document.getElementById('profileActions');
+  const editHintArea = document.getElementById('editHintArea');
+  const inputPasswordHint = document.getElementById('inputPasswordHint');
+  const btnEditHint = document.getElementById('btnEditHint');
+  const btnSaveHint = document.getElementById('btnSaveHint');
+  const btnCancelHint = document.getElementById('btnCancelHint');
+  const editGreetingArea = document.getElementById('editGreetingArea');
+  const inputGreeting = document.getElementById('inputGreeting');
+  const btnEditGreeting = document.getElementById('btnEditGreeting');
+  const btnSaveGreeting = document.getElementById('btnSaveGreeting');
+  const btnCancelGreeting = document.getElementById('btnCancelGreeting');
+  const infoCard = document.getElementById('infoCard');
+  const passwordCard = document.getElementById('passwordCard');
+  const btnShowPassword = document.getElementById('btnShowPassword');
+  const btnReturnProfile = document.getElementById('btnReturnProfile');
+
+  // Load greeting from SPA settings
+  function loadGreeting() {
+    try {
+      var data = JSON.parse(localStorage.getItem('zhixun_one_stop_v1') || '{}');
+      var greeting = (data.settings && data.settings.greeting) || ('欢迎回来，' + (userData && userData.display_name || userData && userData.username || '管理员'));
+      if (inputGreeting) inputGreeting.value = greeting;
+    } catch(e) { if (inputGreeting) inputGreeting.value = '欢迎回来'; }
+  }
+  const btnChangePassword = document.getElementById('btnChangePassword');
+  const btnLogout = document.getElementById('btnLogout');
+  const oldPasswordInput = document.getElementById('oldPassword');
+  const newPasswordInput = document.getElementById('newPassword');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const changePasswordFeedback = document.getElementById('changePasswordFeedback');
+  const changeConfirmFeedback = document.getElementById('changeConfirmFeedback');
+
+  let userData = null;
+
+  function setActiveView(view) {
+    const showPassword = view === 'password';
+    infoCard.hidden = showPassword;
+    passwordCard.hidden = !showPassword;
+    btnShowPassword.classList.toggle('is-active', showPassword);
+    if (!showPassword) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  btnShowPassword.addEventListener('click', function() {
+    setActiveView('password');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  btnReturnProfile.addEventListener('click', function() {
+    setActiveView('profile');
+  });
+
+  // ====== 加载用户信息 ======
+  async function loadProfile() {
+    try {
+      const resp = await ZhiXunAuth.fetch('/api/auth/me');
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '加载失败');
+      userData = data.user;
+      renderProfile(userData);
+      loadGreeting();
+    } catch (err) {
+      showError('加载用户信息失败: ' + err.message);
+    }
+  }
+
+  function renderProfile(user) {
+    var name = user.display_name || user.username;
+    avatarLetter.textContent = name.charAt(0).toUpperCase();
+    if (user.avatar_url) {
+      avatarImage.src = user.avatar_url;
+      avatarPicker.classList.add('has-image');
+      btnChooseAvatar.textContent = '更换头像';
+    } else {
+      avatarImage.removeAttribute('src');
+      avatarPicker.classList.remove('has-image');
+      btnChooseAvatar.textContent = '上传头像';
+    }
+
+    displayNameTitle.textContent = user.display_name || user.username;
+    infoUsername.textContent = user.username;
+    infoDisplayName.textContent = user.display_name || '-';
+    infoPasswordHint.textContent = user.password_hint || '未设置';
+    inputDisplayName.value = user.display_name || '';
+    inputPasswordHint.value = user.password_hint || '';
+  }
+
+  // ====== 上传自定义头像 ======
+  btnChooseAvatar.addEventListener('click', function() {
+    avatarInput.click();
+  });
+
+  avatarPicker.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      avatarInput.click();
+    }
+  });
+
+  avatarImage.addEventListener('error', function() {
+    avatarPicker.classList.remove('has-image');
+  });
+
+  avatarInput.addEventListener('change', async function() {
+    var file = avatarInput.files && avatarInput.files[0];
+    avatarInput.value = '';
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+      showError('请选择 JPG、PNG 或 WebP 图片');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showError('头像图片不能超过 5MB');
+      return;
+    }
+
+    var previousAvatar = userData && userData.avatar_url;
+    btnChooseAvatar.disabled = true;
+    btnChooseAvatar.textContent = '上传中...';
+    hideToasts();
+
+    try {
+      var avatarData = await createAvatarData(file);
+      avatarImage.src = avatarData;
+      avatarPicker.classList.add('has-image');
+
+      var resp = await ZhiXunAuth.fetch('/api/auth/profile', {
+        method: 'PUT',
+        body: JSON.stringify({ avatar_url: avatarData }),
+      });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '头像上传失败');
+
+      userData = data.user;
+      renderProfile(userData);
+      updateStoredUser(data.user);
+      showSuccess('头像已更新');
+    } catch (err) {
+      if (previousAvatar) {
+        avatarImage.src = previousAvatar;
+        avatarPicker.classList.add('has-image');
+      } else {
+        avatarImage.removeAttribute('src');
+        avatarPicker.classList.remove('has-image');
+      }
+      showError(err.message || '头像上传失败');
+    } finally {
+      btnChooseAvatar.disabled = false;
+      btnChooseAvatar.textContent = userData && userData.avatar_url ? '更换头像' : '上传头像';
+    }
+  });
+
+  function createAvatarData(file) {
+    return new Promise(function(resolve, reject) {
+      var image = new Image();
+      var objectUrl = URL.createObjectURL(file);
+      image.onload = function() {
+        try {
+          var size = Math.min(image.naturalWidth, image.naturalHeight);
+          var sourceX = (image.naturalWidth - size) / 2;
+          var sourceY = (image.naturalHeight - size) / 2;
+          var canvas = document.createElement('canvas');
+          canvas.width = 512;
+          canvas.height = 512;
+          var context = canvas.getContext('2d');
+          context.fillStyle = '#ffffff';
+          context.fillRect(0, 0, 512, 512);
+          context.drawImage(image, sourceX, sourceY, size, size, 0, 0, 512, 512);
+          URL.revokeObjectURL(objectUrl);
+          resolve(canvas.toDataURL('image/jpeg', 0.86));
+        } catch (error) {
+          URL.revokeObjectURL(objectUrl);
+          reject(error);
+        }
+      };
+      image.onerror = function() {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('无法读取这张图片'));
+      };
+      image.src = objectUrl;
+    });
+  }
+
+  function updateStoredUser(user) {
+    var stored = ZhiXunAuth.getUser() || {};
+    localStorage.setItem('zhixun_user', JSON.stringify(Object.assign(stored, user)));
+  }
+
+  // ====== 编辑显示名称 ======
+  btnEditName.addEventListener('click', function() {
+    editNameArea.style.display = 'block';
+    profileActions.style.display = 'none';
+    inputDisplayName.value = userData.display_name || '';
+    inputDisplayName.focus();
+  });
+
+  btnCancelName.addEventListener('click', function() {
+    editNameArea.style.display = 'none';
+    profileActions.style.display = 'grid';
+    hideToasts();
+  });
+
+  btnSaveName.addEventListener('click', async function() {
+    var newName = inputDisplayName.value.trim();
+    if (!newName) {
+      showError('显示名称不能为空');
+      return;
+    }
+
+    setBtnLoading(btnSaveName, true);
+    hideToasts();
+
+    try {
+      var resp = await ZhiXunAuth.fetch('/api/auth/profile', {
+        method: 'PUT',
+        body: JSON.stringify({ display_name: newName }),
+      });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '保存失败');
+
+      userData = data.user;
+      renderProfile(userData);
+      showSuccess('显示名称已更新');
+
+      // 更新 localStorage 中的用户信息
+      updateStoredUser(data.user);
+
+      editNameArea.style.display = 'none';
+      profileActions.style.display = 'grid';
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setBtnLoading(btnSaveName, false);
+    }
+  });
+
+  // ====== 编辑密码提示 ======
+  btnEditHint.addEventListener('click', function() {
+    editHintArea.style.display = 'block';
+    editNameArea.style.display = 'none';
+    profileActions.style.display = 'none';
+    inputPasswordHint.value = userData.password_hint || '';
+    inputPasswordHint.focus();
+  });
+
+  btnCancelHint.addEventListener('click', function() {
+    editHintArea.style.display = 'none';
+    profileActions.style.display = 'grid';
+    hideToasts();
+  });
+
+  // ====== 编辑首页问候语 ======
+  if (btnEditGreeting) { btnEditGreeting.addEventListener('click', function() {
+    editGreetingArea.style.display = 'block';
+    editNameArea.style.display = 'none';
+    editHintArea.style.display = 'none';
+    profileActions.style.display = 'none';
+    loadGreeting();
+    inputGreeting.focus();
+  }); }
+
+  if (btnCancelGreeting) { btnCancelGreeting.addEventListener('click', function() {
+    editGreetingArea.style.display = 'none';
+    profileActions.style.display = 'grid';
+    hideToasts();
+  }); }
+
+  if (btnSaveGreeting) { btnSaveGreeting.addEventListener('click', function() {
+    var greeting = inputGreeting.value.trim();
+    if (!greeting) return showError('问候语不能为空');
+    try {
+      var data = JSON.parse(localStorage.getItem('zhixun_one_stop_v1') || '{}');
+      if (!data.settings) data.settings = {};
+      data.settings.greeting = greeting;
+      localStorage.setItem('zhixun_one_stop_v1', JSON.stringify(data));
+      showSuccess('问候语已保存');
+      editGreetingArea.style.display = 'none';
+      profileActions.style.display = 'grid';
+    } catch(e) { showError('保存失败'); }
+  }); }
+
+  btnSaveHint.addEventListener('click', async function() {
+    var newHint = inputPasswordHint.value.trim();
+    setBtnLoading(btnSaveHint, true);
+    hideToasts();
+
+    try {
+      var resp = await ZhiXunAuth.fetch('/api/auth/profile', {
+        method: 'PUT',
+        body: JSON.stringify({ password_hint: newHint }),
+      });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '保存失败');
+
+      userData = data.user;
+      renderProfile(userData);
+      updateStoredUser(data.user);
+      showSuccess(newHint ? '密码提示已更新' : '密码提示已清除');
+      editHintArea.style.display = 'none';
+      profileActions.style.display = 'grid';
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setBtnLoading(btnSaveHint, false);
+    }
+  });
+
+  function getPasswordValidation(password) {
+    var categories = [
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /[0-9]/.test(password),
+      /[^A-Za-z0-9]/.test(password),
+    ].filter(Boolean).length;
+    return { length: password.length >= 8, categories: categories >= 2 };
+  }
+
+  function updateChangePasswordRule(element, valid, hasValue) {
+    element.classList.toggle('is-valid', Boolean(hasValue && valid));
+    element.classList.toggle('is-invalid', Boolean(hasValue && !valid));
+  }
+
+  function updateChangePasswordValidation() {
+    var newPwd = newPasswordInput.value;
+    var confirmPwd = confirmPasswordInput.value;
+    var validation = getPasswordValidation(newPwd);
+    var hasNewPassword = Boolean(newPwd);
+    updateChangePasswordRule(document.querySelector('[data-change-password-rule="length"]'), validation.length, hasNewPassword);
+    updateChangePasswordRule(document.querySelector('[data-change-password-rule="categories"]'), validation.categories, hasNewPassword);
+
+    var missing = [];
+    if (hasNewPassword && !validation.length) missing.push('至少8位');
+    if (hasNewPassword && !validation.categories) missing.push('大写字母、小写字母、数字、特殊字符中至少两类');
+    if (missing.length) {
+      changePasswordFeedback.textContent = '未满足：' + missing.join('、');
+      changePasswordFeedback.className = 'password-feedback is-invalid';
+    } else if (hasNewPassword) {
+      changePasswordFeedback.textContent = '密码规则已满足';
+      changePasswordFeedback.className = 'password-feedback is-valid';
+    } else {
+      changePasswordFeedback.textContent = '';
+      changePasswordFeedback.className = 'password-feedback';
+    }
+
+    if (!confirmPwd) {
+      changeConfirmFeedback.textContent = '';
+      changeConfirmFeedback.className = 'password-feedback';
+    } else if (newPwd !== confirmPwd) {
+      changeConfirmFeedback.textContent = '两次输入的新密码不一致';
+      changeConfirmFeedback.className = 'password-feedback is-invalid';
+    } else {
+      changeConfirmFeedback.textContent = '两次输入的新密码一致';
+      changeConfirmFeedback.className = 'password-feedback is-valid';
+    }
+
+    if (!btnChangePassword.classList.contains('loading')) {
+      btnChangePassword.disabled = !oldPasswordInput.value || !validation.length || !validation.categories || !confirmPwd || newPwd !== confirmPwd;
+    }
+    return validation;
+  }
+
+  document.querySelectorAll('[data-password-toggle]').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      var input = document.getElementById(toggle.dataset.passwordToggle);
+      if (!input) return;
+      var visible = input.type === 'password';
+      input.type = visible ? 'text' : 'password';
+      toggle.classList.toggle('is-visible', visible);
+      toggle.setAttribute('aria-label', visible ? '隐藏密码' : '显示密码');
+      toggle.title = visible ? '隐藏密码' : '显示密码';
+    });
+  });
+
+  [oldPasswordInput, newPasswordInput, confirmPasswordInput].forEach(function(input) {
+    input.addEventListener('input', updateChangePasswordValidation);
+  });
+  updateChangePasswordValidation();
+
+  // ====== 修改密码 ======
+  document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var oldPwd = oldPasswordInput.value;
+    var newPwd = newPasswordInput.value;
+    var confirmPwd = confirmPasswordInput.value;
+
+    if (!oldPwd || !newPwd || !confirmPwd) {
+      showError('请填写所有密码字段');
+      return;
+    }
+    var validation = getPasswordValidation(newPwd);
+    if (!validation.length || !validation.categories) {
+      var missing = [];
+      if (!validation.length) missing.push('至少8位');
+      if (!validation.categories) missing.push('大写字母、小写字母、数字、特殊字符中至少两类');
+      showError('新密码不符合要求：' + missing.join('、'));
+      return;
+    }
+    if (newPwd !== confirmPwd) {
+      showError('两次输入的新密码不一致');
+      return;
+    }
+
+    setBtnLoading(btnChangePassword, true);
+    hideToasts();
+
+    try {
+      var resp = await ZhiXunAuth.fetch('/api/auth/password', {
+        method: 'PUT',
+        body: JSON.stringify({ old_password: oldPwd, new_password: newPwd }),
+      });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '修改失败');
+
+      showSuccess('密码修改成功');
+      document.getElementById('passwordForm').reset();
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setBtnLoading(btnChangePassword, false);
+      updateChangePasswordValidation();
+    }
+  });
+
+  // ====== 退出登录 ======
+  btnLogout.addEventListener('click', function() {
+    ZhiXunAuth.clearSession();
+    window.location.href = profileLogin;
+  });
+
+  // ====== 工具函数 ======
+  function setBtnLoading(btn, loading) {
+    btn.classList.toggle('loading', loading);
+    btn.disabled = loading;
+  }
+
+  function showError(msg) {
+    toastError.textContent = msg;
+    toastError.classList.add('show');
+    toastSuccess.classList.remove('show');
+  }
+
+  function showSuccess(msg) {
+    toastSuccess.textContent = msg;
+    toastSuccess.classList.add('show');
+    toastError.classList.remove('show');
+    setTimeout(function() { toastSuccess.classList.remove('show'); }, 3000);
+  }
+
+  function hideToasts() {
+    toastError.classList.remove('show');
+    toastSuccess.classList.remove('show');
+  }
+
+  // ====== 启动 ======
+  setActiveView('profile');
+  loadProfile();
+})();
+</script>
+</body>
+</html>

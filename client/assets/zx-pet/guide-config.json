@@ -1,0 +1,44 @@
+[
+  {
+    "route": "customers",
+    "action": "import-customers",
+    "title": "批量导入客户",
+    "message": "点击这里可以批量导入客户，上传文件后先检查校验结果。",
+    "mode": "beginner"
+  },
+  {
+    "route": "customers",
+    "action": "customer-tab-pending",
+    "title": "待确认客户",
+    "message": "这里可以查看待确认客户，确认后再加入客户库。",
+    "mode": "beginner"
+  },
+  {
+    "route": "customers",
+    "action": "new-customer",
+    "title": "新增客户",
+    "message": "这里可以手动新增客户到客户库。",
+    "mode": "beginner"
+  },
+  {
+    "route": "tasks",
+    "action": "new-task",
+    "title": "新建任务",
+    "message": "这里可以创建客户沟通、回访和其他运营任务。",
+    "mode": "beginner"
+  },
+  {
+    "route": "knowledge",
+    "action": "knowledge-tab-materials",
+    "title": "资料库",
+    "message": "这里可以集中管理产品资料、培训资料和运营素材。",
+    "mode": "beginner"
+  },
+  {
+    "route": "*",
+    "action": "default",
+    "title": "志询小狐",
+    "message": "这里的提示内容可以继续在本地配置文件中维护。",
+    "mode": "beginner"
+  }
+]

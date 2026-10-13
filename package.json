@@ -1,0 +1,10 @@
+{
+  "name": "zhixun-crm",
+  "version": "2.0.0",
+  "description": "志询 · 增长运营平台 - 高考志愿规划师CRM系统",
+  "private": true,
+  "scripts": {
+    "dev": "cd server && node src/index.js",
+    "start": "cd server && node src/index.js"
+  }
+}

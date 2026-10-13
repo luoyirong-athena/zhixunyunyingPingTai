@@ -1,0 +1,104 @@
+#zxPetRoot {
+  --zx-pet-blue: #2764e7;
+  --zx-pet-ink: #152b4c;
+  position: fixed;
+  left: auto;
+  top: auto;
+  right: 18px;
+  bottom: 18px;
+  z-index: 1200;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 24px));
+  user-select: none;
+  touch-action: auto;
+}
+
+#zxPetRoot { left: auto !important; top: auto !important; right: 18px !important; bottom: 18px !important; }
+
+#zxPetRoot.zx-pet-hidden { display: none; }
+#zxPetRoot.zx-pet-mini .zx-pet-dialog,
+#zxPetRoot.zx-pet-mini .zx-pet-actions { display: none; }
+
+.zx-pet-avatar {
+  position: relative;
+  flex: 0 0 86px;
+  width: 86px;
+  height: 104px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 12px 18px rgba(16, 37, 68, .22));
+}
+
+.zx-pet-avatar:focus-visible { outline: 3px solid rgba(39, 100, 231, .35); outline-offset: 3px; }
+.zx-pet-avatar canvas,
+.zx-pet-fallback { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.zx-pet-fallback { position: absolute; inset: 0; }
+.zx-pet-fallback[hidden] { display: none; }
+#zxPetRoot.zx-pet-mini .zx-pet-avatar { flex-basis: 48px; width: 48px; height: 58px; }
+
+.zx-pet-dialog {
+  width: min(292px, calc(100vw - 118px));
+  max-height: min(440px, calc(100vh - 30px));
+  overflow: auto;
+  padding: 13px 14px;
+  border: 1px solid #cbdcf4;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .98);
+  color: #526984;
+  font-size: 12px;
+  line-height: 1.55;
+  box-shadow: 0 14px 36px rgba(16, 37, 68, .18);
+}
+
+.zx-pet-dialog strong { display: block; margin-bottom: 3px; color: var(--zx-pet-blue); font-size: 13px; }
+.zx-pet-dialog .zx-pet-note { color: #70819a; }
+.zx-pet-mode-picker,
+.zx-pet-jump-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.zx-pet-mode-picker button,
+.zx-pet-jump-row button,
+.zx-pet-action-button {
+  min-height: 30px;
+  padding: 4px 9px;
+  border: 1px solid #cbdcf4;
+  border-radius: 7px;
+  background: #f3f7fe;
+  color: #315f9d;
+  font-size: 11px;
+  cursor: pointer;
+}
+.zx-pet-mode-picker button:hover,
+.zx-pet-jump-row button:hover,
+.zx-pet-action-button:hover { border-color: #7fa7ed; background: #eaf2ff; }
+.zx-pet-actions { position: absolute; right: 3px; top: -29px; display: flex; gap: 5px; }
+.zx-pet-actions button,
+.zx-pet-restore {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 1px solid #cbdaf0;
+  border-radius: 7px;
+  background: #fff;
+  color: #5a6e88;
+  cursor: pointer;
+}
+.zx-pet-restore { position: fixed; right: 6px; bottom: 18px; z-index: 1199; display: none; width: auto; padding: 0 10px; }
+.zx-pet-restore.zx-pet-visible { display: grid; }
+.zx-pet-loading { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: #f2a93b; vertical-align: 1px; }
+
+@media (max-width: 640px) {
+  #zxPetRoot { left: auto !important; top: auto !important; right: 10px !important; bottom: 10px !important; }
+  .zx-pet-dialog { width: min(272px, calc(100vw - 82px)); }
+  .zx-pet-avatar { flex-basis: 68px; width: 68px; height: 82px; }
+  #zxPetRoot.zx-pet-mini .zx-pet-avatar { flex-basis: 44px; width: 44px; height: 54px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #zxPetRoot { scroll-behavior: auto; }
+}

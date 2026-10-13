@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#eef4ff">
+  <title>登录 · 志询移动运营平台</title>
+  <link rel="icon" type="image/png" href="../assets/zx-browser-icon.png">
+  <link rel="apple-touch-icon" href="../assets/zx-browser-icon-180.png">
+  <style>
+    :root { color-scheme: light; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    * { box-sizing: border-box; }
+    body { min-height: 100svh; margin: 0; padding: 24px 18px; display: grid; place-items: center; color: #17233b; background: #eef4ff; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 12% 0%, #d9e8ff 0, transparent 42%), radial-gradient(circle at 100% 100%, #d7f4ee 0, transparent 38%); }
+    .page { width: min(100%, 430px); }
+    .brand { display: grid; justify-items: center; gap: 10px; margin-bottom: 24px; }
+    .brand img { display: block; }
+    .brand-logo { width: 58px; height: 58px; }
+    .brand-wordmark { width: min(190px, 58vw); height: auto; }
+    .card { padding: 25px 20px 20px; border: 1px solid #dfe8f7; border-radius: 20px; background: rgba(255,255,255,.92); box-shadow: 0 18px 50px rgba(43,77,135,.14); }
+    .heading { margin-bottom: 22px; }
+    .heading h1 { margin: 0 0 7px; font-size: 25px; line-height: 1.2; letter-spacing: 0; }
+    .heading p { margin: 0; color: #71809a; font-size: 13px; line-height: 1.6; }
+    .message { display: none; margin-bottom: 16px; padding: 10px 12px; border-radius: 10px; font-size: 13px; line-height: 1.5; }
+    .message.show { display: block; }
+    .message.error { color: #b42318; border: 1px solid #f4c7c3; background: #fff3f2; }
+    .message.success { color: #087443; border: 1px solid #b9e5cc; background: #effbf3; }
+    .field { margin-bottom: 15px; }
+    .field label { display: block; margin-bottom: 7px; color: #526077; font-size: 13px; font-weight: 650; }
+    .input-wrap { display: flex; align-items: center; min-height: 46px; border: 1px solid #d8e1ef; border-radius: 11px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+    .input-wrap:focus-within { border-color: #315efb; box-shadow: 0 0 0 4px rgba(49,94,251,.1); }
+    .input-wrap input { width: 100%; min-width: 0; height: 44px; padding: 0 13px; border: 0; outline: 0; color: #17233b; background: transparent; font: inherit; font-size: 14px; }
+    .toggle { flex: 0 0 auto; width: 42px; height: 42px; border: 0; color: #74819a; background: transparent; cursor: pointer; }
+    .toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .toggle .eye-off { display: none; }
+    .toggle.is-visible .eye { display: none; }
+    .toggle.is-visible .eye-off { display: inline; }
+    .options { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 3px 0 18px; color: #71809a; font-size: 12px; }
+    .options label { display: inline-flex; align-items: center; gap: 6px; }
+    .options input { accent-color: #315efb; }
+    button { font: inherit; }
+    .link-button, .mode-link { padding: 0; border: 0; color: #315efb; background: transparent; cursor: pointer; }
+    .submit { width: 100%; height: 46px; border: 0; border-radius: 11px; color: #fff; background: #315efb; box-shadow: 0 9px 20px rgba(49,94,251,.22); cursor: pointer; font-size: 15px; font-weight: 700; }
+    .submit:disabled { opacity: .6; cursor: wait; }
+    .mode-link { display: block; margin: 19px auto 0; color: #71809a; font-size: 13px; }
+    .mode-link span { color: #315efb; font-weight: 650; }
+    .panel[hidden] { display: none; }
+    .password-hint { margin-top: 8px; color: #71809a; font-size: 12px; line-height: 1.5; }
+    .reset-form { display: grid; gap: 8px; margin-top: 8px; }
+    .reset-form input { width: 100%; height: 38px; padding: 0 10px; border: 1px solid #d8e1ef; border-radius: 8px; outline: 0; font: inherit; font-size: 13px; }
+    .reset-form button { min-height: 38px; border: 0; border-radius: 8px; color: #fff; background: #315efb; cursor: pointer; font-size: 13px; }
+    .rules { margin-top: 7px; color: #71809a; font-size: 11px; line-height: 1.5; }
+    @media (min-width: 481px) { body { padding: 32px; } .card { padding: 30px 28px 24px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="brand" aria-label="志询移动运营平台">
+      <img class="brand-logo" src="../assets/zx-login-logo.svg" alt="志询">
+      <img class="brand-wordmark" src="../assets/zx-login-wordmark.svg" alt="志询运营管理平台">
+    </div>
+    <section class="card">
+      <div id="message" class="message" role="status"></div>
+      <section id="loginPanel" class="panel">
+        <div class="heading"><h1>登录</h1><p>进入移动运营工作台</p></div>
+        <form id="loginForm">
+          <div class="field"><label for="username">用户名</label><div class="input-wrap"><input id="username" autocomplete="username" placeholder="请输入用户名" required></div></div>
+          <div class="field"><label for="password">密码</label><div class="input-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="请输入密码" required><button class="toggle" type="button" data-toggle="password" aria-label="显示密码"><svg class="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><svg class="eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18"></path><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"></path><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"></path></svg></button></div><div id="passwordHint" class="password-hint"></div></div>
+          <div class="options"><label><input id="savePassword" type="checkbox">保存密码</label><button id="forgotPassword" class="link-button" type="button">忘记密码？</button></div>
+          <button id="loginButton" class="submit" type="submit">登录</button>
+        </form>
+        <button class="mode-link" type="button" data-mode="register">没有账号？<span>立即注册</span></button>
+      </section>
+      <section id="registerPanel" class="panel" hidden>
+        <div class="heading"><h1>注册账号</h1><p>创建移动运营平台账号</p></div>
+        <form id="registerForm">
+          <div class="field"><label for="regUsername">用户名</label><div class="input-wrap"><input id="regUsername" autocomplete="username" placeholder="请输入用户名" required></div></div>
+          <div class="field"><label for="regDisplayName">显示名称</label><div class="input-wrap"><input id="regDisplayName" autocomplete="name" placeholder="可选"></div></div>
+          <div class="field"><label for="regPassword">密码</label><div class="input-wrap"><input id="regPassword" type="password" autocomplete="new-password" placeholder="至少8位" required><button class="toggle" type="button" data-toggle="regPassword" aria-label="显示密码"><svg class="eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><svg class="eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18"></path><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"></path><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"></path></svg></button></div><div class="rules">至少 8 位，并包含大写、小写、数字、特殊字符中的至少两类。</div></div>
+          <div class="field"><label for="regConfirmPassword">确认密码</label><div class="input-wrap"><input id="regConfirmPassword" type="password" autocomplete="new-password" placeholder="请再次输入密码" required></div></div>
+          <div class="field"><label for="regPasswordHint">密码提示</label><div class="input-wrap"><input id="regPasswordHint" maxlength="80" placeholder="可选"></div></div>
+          <button id="registerButton" class="submit" type="submit">注册</button>
+        </form>
+        <button class="mode-link" type="button" data-mode="login">已有账号？<span>返回登录</span></button>
+      </section>
+    </section>
+  </main>
+  <script src="../auth-helper.js?v=4"></script>
+  <script>
+    (function () {
+      'use strict';
+      var HOME = '/mobile/#/dashboard';
+      var PASSWORD = '/password.html?force=1&from=mobile';
+      var message = document.getElementById('message');
+      var loginPanel = document.getElementById('loginPanel');
+      var registerPanel = document.getElementById('registerPanel');
+      var loginForm = document.getElementById('loginForm');
+      var registerForm = document.getElementById('registerForm');
+      var username = document.getElementById('username');
+      var password = document.getElementById('password');
+      var passwordHint = document.getElementById('passwordHint');
+      var savePassword = document.getElementById('savePassword');
+      var savedKey = 'zhixun_saved_login_v1';
+
+      if (ZhiXunAuth.isAuthenticated()) {
+        var existing = ZhiXunAuth.getUser();
+        window.location.replace(existing && existing.password_reset_required ? PASSWORD : HOME);
+        return;
+      }
+
+      function showMessage(text, error) {
+        message.textContent = text || '';
+        message.className = 'message show ' + (error ? 'error' : 'success');
+      }
+      function hideMessage() { message.textContent = ''; message.className = 'message'; }
+      function passwordValid(value) {
+        var categories = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/].filter(function (pattern) { return pattern.test(value); }).length;
+        return value.length >= 8 && categories >= 2;
+      }
+      function switchPanel(mode) {
+        var register = mode === 'register';
+        loginPanel.hidden = register;
+        registerPanel.hidden = !register;
+        hideMessage();
+      }
+      document.querySelectorAll('[data-mode]').forEach(function (button) { button.addEventListener('click', function () { switchPanel(button.dataset.mode); }); });
+      document.querySelectorAll('[data-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          var input = document.getElementById(button.dataset.toggle);
+          var visible = input.type === 'password';
+          input.type = visible ? 'text' : 'password';
+          button.classList.toggle('is-visible', visible);
+          button.setAttribute('aria-label', visible ? '隐藏密码' : '显示密码');
+        });
+      });
+      try {
+        var saved = JSON.parse(localStorage.getItem(savedKey) || 'null');
+        if (saved && saved.username && saved.password) { username.value = saved.username; password.value = saved.password; savePassword.checked = true; }
+      } catch (_) {}
+      var hintTimer;
+      username.addEventListener('input', function () {
+        clearTimeout(hintTimer);
+        hintTimer = setTimeout(async function () {
+          var value = username.value.trim();
+          if (!value) { passwordHint.textContent = ''; return; }
+          try {
+            var response = await fetch('/api/auth/password-hint?username=' + encodeURIComponent(value));
+            var data = await response.json();
+            passwordHint.textContent = response.ok && data.hint ? '密码提示：' + data.hint : '';
+          } catch (_) { passwordHint.textContent = ''; }
+        }, 350);
+      });
+      document.getElementById('forgotPassword').addEventListener('click', async function () {
+        var value = username.value.trim();
+        if (!value) { showMessage('请先填写用户名，再申请重置密码', true); return; }
+        try {
+          var response = await fetch('/api/auth/password-reset-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: value }) });
+          var data = await response.json();
+          if (!response.ok) throw new Error(data.error || '申请提交失败');
+          showMessage(data.message || '申请已提交，请联系系统管理员处理');
+        } catch (error) { showMessage(error.message || '申请提交失败', true); }
+      });
+      loginForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); hideMessage();
+        var identifier = username.value.trim();
+        if (!identifier || !password.value) { showMessage('请输入用户名和密码', true); return; }
+        var button = document.getElementById('loginButton'); button.disabled = true; button.textContent = '登录中…';
+        try {
+          var response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: identifier, password: password.value }) });
+          var data = await response.json();
+          if (!response.ok) throw new Error(data.error || '登录失败，请重试');
+          if (savePassword.checked) localStorage.setItem(savedKey, JSON.stringify({ username: identifier, password: password.value })); else localStorage.removeItem(savedKey);
+          ZhiXunAuth.setSession(data.token, data.user);
+          window.location.replace(data.must_change_password ? PASSWORD : HOME);
+        } catch (error) { showMessage(error.message, true); button.disabled = false; button.textContent = '登录'; }
+      });
+      registerForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); hideMessage();
+        var name = document.getElementById('regUsername').value.trim();
+        var displayName = document.getElementById('regDisplayName').value.trim();
+        var newPassword = document.getElementById('regPassword').value;
+        var confirmPassword = document.getElementById('regConfirmPassword').value;
+        var hint = document.getElementById('regPasswordHint').value.trim();
+        if (!name) return showMessage('请输入用户名', true);
+        if (!passwordValid(newPassword)) return showMessage('密码至少8位，并满足至少两类字符要求', true);
+        if (newPassword !== confirmPassword) return showMessage('两次输入的密码不一致', true);
+        var button = document.getElementById('registerButton'); button.disabled = true; button.textContent = '注册中…';
+        try {
+          var response = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: name, password: newPassword, confirm_password: confirmPassword, display_name: displayName || undefined, password_hint: hint || undefined }) });
+          var data = await response.json();
+          if (!response.ok) throw new Error(data.error || '注册失败');
+          ZhiXunAuth.setSession(data.token, data.user); window.location.replace(HOME);
+        } catch (error) { showMessage(error.message || '注册失败', true); button.disabled = false; button.textContent = '注册'; }
+      });
+    }());
+  </script>
+</body>
+</html>

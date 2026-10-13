@@ -1,0 +1,48 @@
+# 依赖
+node_modules/
+
+# 数据库（含真实客户数据，绝不入仓；WAL/SHM 为运行时自动生成）
+server/data/*.db
+server/data/*.db-wal
+server/data/*.db-shm
+server/data/*.db.backup-*
+server/data/customer-evidence/
+server/data/materials/
+server/data/backups/
+
+# 环境变量文件
+.env
+.env.*
+
+# 日志
+*.log
+npm-debug.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# 资料库运行时文件
+server/data/materials/
+
+# 抖音cookie（敏感会话数据，不提交）
+server/data/douyin_cookies.json
+
+# 浏览器 profile 数据（含 cookie、缓存等敏感信息）
+server/data/browser-profile/
+
+# 备份文件
+*.bak
+*.backup
+*.backup-*
+*.blend1
+server/data/backups/
+
+# 旧构建产物（当前页面由源码直接提供）
+client/assets/index-*.js
+client/assets/index-*.css

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 · 志询增长运营平台</title>
+  <link rel="icon" type="image/png" href="./assets/zx-browser-icon.png" />
+  <link rel="apple-touch-icon" href="./assets/zx-browser-icon-180.png" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      min-height: 100vh;
+      background-color: #d9efff;
+      background-image:
+        linear-gradient(135deg, rgba(225, 244, 255, .42) 0%, rgba(135, 205, 244, .18) 48%, rgba(75, 137, 220, .3) 100%),
+        url('./assets/login-mountain-ice.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex; align-items: center; justify-content: center; padding: 20px; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: linear-gradient(135deg, rgba(249, 253, 255, .2) 0%, rgba(116, 199, 245, .07) 52%, rgba(49, 94, 251, .12) 100%);
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        radial-gradient(ellipse at center, rgba(255,255,255,.46) 0%, rgba(236,248,255,.28) 42%, transparent 72%),
+        radial-gradient(ellipse at center, rgba(255,255,255,.38) 0%, rgba(220,241,255,.2) 46%, transparent 74%),
+        radial-gradient(ellipse at center, rgba(245,252,255,.36) 0%, rgba(206,235,255,.18) 44%, transparent 73%);
+      background-repeat: no-repeat;
+      background-size: 48vw 16vh, 38vw 13vh, 44vw 15vh;
+      background-position: -18vw 16vh, 34vw 8vh, 86vw 27vh;
+      filter: blur(20px); opacity: .64; will-change: background-position;
+      animation: cloud-drift 42s ease-in-out infinite alternate;
+    }
+    @keyframes cloud-drift {
+      from { background-position: -18vw 16vh, 34vw 8vh, 86vw 27vh; }
+      to { background-position: 12vw 17vh, 58vw 10vh, 112vw 25vh; }
+    }
+    .login-container {
+      position: relative; z-index: 1; display: grid; grid-template-columns: minmax(230px, 34%) minmax(0, 1fr);
+      width: min(920px, calc(100vw - 40px)); max-height: calc(100svh - 40px); overflow: hidden;
+      background: rgba(214, 237, 255, .25); border: 1px solid rgba(255, 255, 255, .72); border-radius: 18px;
+      box-shadow: 0 26px 70px rgba(24, 76, 137, .24), inset 0 1px 0 rgba(255,255,255,.72);
+      backdrop-filter: blur(14px) saturate(118%); -webkit-backdrop-filter: blur(14px) saturate(118%);
+      transition: width .3s ease, grid-template-columns .3s ease;
+    }
+    .brand-panel {
+      position: relative; min-height: 520px; padding: 48px 34px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; overflow: hidden;
+      border-right: 1px solid rgba(255,255,255,.68); background: rgba(224, 242, 255, .18);
+    }
+    .brand-panel::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(150deg, rgba(255,255,255,.3), rgba(126,190,240,.08) 58%, rgba(49,94,251,.12));
+    }
+    .brand-logo { position: relative; width: 122px; max-width: 78%; height: auto; margin-bottom: 28px; filter: drop-shadow(0 14px 18px rgba(49,94,251,.2)); }
+    .brand-wordmark { position: relative; width: min(330px, 100%); height: auto; display: block; margin-top: 2px; filter: drop-shadow(0 12px 18px rgba(49,94,251,.12)); }
+    .form-panel { min-width: 0; padding: 44px 54px; overflow-y: auto; background: rgba(247,252,255,.18); scrollbar-width: thin; scrollbar-color: rgba(49,94,251,.28) transparent; }
+    .login-panel.is-hidden { display: none; }
+    .panel-heading { margin-bottom: 28px; text-align: center; }
+    .panel-heading h1 { color: #15375f; font-size: 27px; line-height: 1.2; font-weight: 720; letter-spacing: 0; }
+    .panel-heading p { margin-top: 8px; color: #6685a5; font-size: 12px; line-height: 1.5; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #234b78; margin-bottom: 8px; letter-spacing: .5px; }
+    .input-wrapper { position: relative; }
+    .input-wrapper .icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #5c7fa4; pointer-events: none; display: flex; }
+    .form-group input { width: 100%; height: 46px; padding: 0 48px 0 44px; background: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.78); border-radius: 23px; font-size: 14px; color: #173b68; outline: none; transition: all .25s ease; box-shadow: inset 0 1px 2px rgba(44,94,145,.05), 0 4px 14px rgba(55,112,171,.08); }
+    .password-toggle { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 9px; color: #94a3b8; background: transparent; cursor: pointer; }
+    .password-toggle:hover, .password-toggle:focus-visible { color: #315efb; background: rgba(49,94,251,.09); outline: none; }
+    .password-toggle svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .password-toggle .eye-off { display: none; }
+    .password-toggle.is-visible .eye { display: none; }
+    .password-toggle.is-visible .eye-off { display: block; }
+    .form-group input::placeholder { color: #6d8ba9; }
+    .form-group input:focus { border-color: #78aaff; background: rgba(255,255,255,.9); box-shadow: 0 0 0 4px rgba(49,94,251,.13), 0 6px 18px rgba(55,112,171,.1); }
+    .password-hint-box {
+      display: none; margin-top: 9px; padding: 9px 11px;
+      border-radius: 9px; background: rgba(49,94,251,.1);
+      border: 1px solid rgba(49,94,251,.2);
+      color: #28558a; font-size: 12px; line-height: 1.5;
+    }
+    .password-hint-box.show { display: block; }
+    .password-help-text { display: block; }
+    .password-reset-request { margin-top: 8px; padding: 0; border: 0; background: transparent; color: #315efb; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
+    .password-reset-request:hover { color: #214dc8; text-decoration: underline; }
+    .password-reset-form { display: grid; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(49,94,251,.16); }
+    .password-reset-form input { width: 100%; height: 36px; padding: 0 11px; border: 1px solid rgba(49,94,251,.2); border-radius: 9px; background: rgba(255,255,255,.74); color: #173b68; outline: none; font: inherit; font-size: 12px; }
+    .password-reset-form input:focus { border-color: #78aaff; box-shadow: 0 0 0 3px rgba(49,94,251,.12); }
+    .password-reset-submit { width: max-content; padding: 6px 11px; border: 1px solid rgba(49,94,251,.24); border-radius: 8px; background: rgba(49,94,251,.1); color: #315efb; font: inherit; font-size: 12px; cursor: pointer; }
+    .password-reset-submit:disabled { opacity: .6; cursor: not-allowed; }
+    .password-reset-status { color: #a91f38; font-size: 12px; }
+    .form-options { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 2px 15px; }
+    .save-password-option { display: inline-flex; align-items: center; gap: 7px; color: #55799d; font-size: 12px; cursor: pointer; user-select: none; }
+    .save-password-option input { width: 15px; height: 15px; margin: 0; accent-color: #315efb; cursor: pointer; }
+    .forgot-password { padding: 4px 0; border: 0; color: #315efb; background: transparent; font-size: 12px; cursor: pointer; }
+    .forgot-password:hover { color: #214dc8; text-decoration: underline; }
+    .password-rules { margin-top: 9px; padding: 10px 11px; border-radius: 9px; background: rgba(220,238,252,.68); border: 1px solid rgba(255,255,255,.72); color: #607d9b; font-size: 12px; line-height: 1.6; }
+    .password-rules-title { color: #365b82; margin-bottom: 4px; }
+    .password-rule { display: inline-flex; align-items: center; margin-right: 12px; color: #607d9b; }
+    .password-rule::before { content: '○'; margin-right: 4px; color: #6e8aa6; }
+    .password-rule.is-valid { color: #16724a; }
+    .password-rule.is-valid::before { content: '✓'; color: #16965c; }
+    .password-rule.is-invalid { color: #b4233c; }
+    .password-rule.is-invalid::before { content: '×'; color: #d13b53; }
+    .password-feedback { margin-top: 7px; font-size: 12px; line-height: 1.5; }
+    .password-feedback.is-valid { color: #16724a; }
+    .password-feedback.is-invalid { color: #b4233c; }
+    .code-row { display: flex; gap: 10px; }
+    .code-row .input-wrapper { flex: 1; }
+    .btn-code { width: 124px; flex: 0 0 124px; height: 48px; border: 1px solid rgba(120,170,255,.55); border-radius: 12px; background: rgba(49,94,251,.18); color: #cfe3ff; cursor: pointer; font-size: 13px; }
+    .btn-code:hover:not(:disabled) { background: rgba(49,94,251,.32); }
+    .btn-code:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-login { width: 100%; height: 46px; background: linear-gradient(135deg, #234dde 0%, #315efb 54%, #6b91ff 100%); border: none; border-radius: 23px; font-size: 15px; font-weight: 650; color: #fff; cursor: pointer; letter-spacing: 0; transition: all .3s ease; position: relative; overflow: hidden; box-shadow: 0 10px 24px rgba(49,94,251,.24); }
+    .btn-login:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(49,94,251,.42); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-login .spinner { display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; margin-right: 8px; vertical-align: middle; }
+    .btn-login.loading .spinner { display: inline-block; } .btn-login.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg, .success-msg { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-bottom: 18px; display: none; text-align: center; line-height: 1.5; }
+    .error-msg { background: rgba(255,235,238,.78); border: 1px solid rgba(209,59,83,.25); color: #a91f38; }
+    .success-msg { background: rgba(229,249,239,.78); border: 1px solid rgba(22,150,92,.24); color: #126c45; }
+    .show { display: block; }
+    .mode-link { display: block; margin: 18px auto 0; padding: 4px 8px; border: 0; color: #607e9d; background: transparent; font-size: 12px; cursor: pointer; }
+    .mode-link span { color: #315efb; font-weight: 650; }
+    .mode-link:hover span { color: #214dc8; text-decoration: underline; }
+    .register-panel { display: none; }
+    .register-panel.show { display: block; }
+    .form-group input.no-icon { padding-left: 16px; }
+    .optional { color: #6785a4; font-weight: 400; }
+    .login-container.is-register { width: min(640px, calc(100vw - 40px)); grid-template-columns: 1fr; }
+    .login-container.is-register .brand-panel { display: none; }
+    .login-container.is-register .form-panel { padding: 36px 56px; }
+
+    @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .login-container { width: calc(100vw - 16px); grid-template-columns: 32% 68%; max-height: calc(100svh - 16px); border-radius: 14px; }
+      .brand-panel { min-height: 470px; padding: 28px 10px; }
+      .brand-logo { width: 76px; max-width: 88%; margin-bottom: 22px; }
+      .brand-wordmark { width: min(330px, 100%); max-width: 100%; margin-left: 0; transform: none; }
+      .form-panel { padding: 30px 18px; }
+      .panel-heading { margin-bottom: 22px; }
+      .panel-heading h1 { font-size: 23px; }
+      .panel-heading p { display: none; }
+      .form-group { margin-bottom: 14px; }
+      .form-group label { font-size: 12px; }
+      .form-group input { height: 44px; padding-left: 40px; font-size: 13px; }
+      .input-wrapper .icon { left: 14px; }
+      .form-options { align-items: flex-start; gap: 6px; }
+      .save-password-option, .forgot-password, .mode-link { font-size: 11px; }
+      .login-container.is-register { width: calc(100vw - 16px); grid-template-columns: 1fr; }
+      .login-container.is-register .form-panel { padding: 28px 22px; }
+      .code-row { gap: 8px; }
+      .btn-code { width: 106px; flex-basis: 106px; }
+    }
+    /* Keep the compact treatment for legacy links; the H5 entry now uses
+       /mobile/login.html. */
+    body.zx-mobile-login {
+      min-height: 100svh;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+      background-attachment: scroll;
+    }
+    body.zx-mobile-login .login-container {
+      width: min(100%, 420px);
+      grid-template-columns: 1fr;
+      max-height: none;
+      border-radius: 16px;
+    }
+    body.zx-mobile-login .brand-panel { display: none; }
+    body.zx-mobile-login .form-panel { padding: clamp(26px, 8vw, 36px) clamp(18px, 6vw, 28px); overflow: visible; }
+    body.zx-mobile-login .panel-heading { margin-bottom: 24px; }
+    body.zx-mobile-login .panel-heading p { display: block; }
+    body.zx-mobile-login .login-container.is-register { width: min(100%, 420px); }
+    body.zx-mobile-login .login-container.is-register .form-panel { padding: clamp(26px, 8vw, 36px) clamp(18px, 6vw, 28px); }
+  </style>
+</head>
+<body>
+<div class="login-container" id="loginContainer">
+  <section class="brand-panel" aria-label="志询增长运营平台">
+    <img class="brand-logo" src="./assets/zx-login-logo.svg" alt="志询" />
+    <img class="brand-wordmark" src="./assets/zx-login-wordmark.svg" alt="志询·运营管理平台 Zhixun·Yunying" />
+  </section>
+  <section class="form-panel">
+  <div class="error-msg" id="errorMsg"></div><div class="success-msg" id="successMsg"></div>
+  <div class="login-panel" id="loginPanel">
+    <div class="panel-heading"><h1>登录</h1><p>欢迎回来，请登录您的运营账号</p></div>
+    <form id="loginForm">
+    <div class="form-group">
+      <label for="username">用户名</label>
+      <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="username" placeholder="请输入用户名" autocomplete="username" autofocus /></div>
+    </div>
+    <div class="form-group password-field">
+      <label for="password">密码</label>
+      <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><input type="password" id="password" placeholder="请输入密码" autocomplete="current-password" /><button type="button" class="password-toggle" data-password-toggle="password" aria-label="显示密码" title="显示密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+      <div class="password-hint-box" id="passwordHint" aria-live="polite"></div>
+    </div>
+    <div class="form-options">
+      <label class="save-password-option" for="savePassword"><input type="checkbox" id="savePassword" />保存密码</label>
+      <button type="button" class="forgot-password" id="forgotPassword">忘记密码？</button>
+    </div>
+    <button type="submit" class="btn-login" id="btnLogin"><span class="spinner"></span><span class="btn-text">登 录</span></button>
+    </form>
+    <button type="button" class="mode-link" data-mode="register">没有账号？<span>立刻注册～</span></button>
+  </div>
+  <div class="register-panel" id="registerPanel">
+    <div class="panel-heading"><h1>注册账号</h1><p>创建您的志询增长运营平台账号</p></div>
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="regUsername">用户名</label>
+        <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="regUsername" placeholder="请输入用户名" autocomplete="username" /></div>
+      </div>
+      <div class="form-group">
+        <label for="regDisplayName">显示名称 <span class="optional">（可选）</span></label>
+        <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="regDisplayName" placeholder="给自己起个名字吧" autocomplete="name" /></div>
+      </div>
+      <div class="form-group">
+        <label for="regPassword">密码</label>
+        <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><input type="password" id="regPassword" placeholder="至少8位，且需满足至少两类字符要求" autocomplete="new-password" /><button type="button" class="password-toggle" data-password-toggle="regPassword" aria-label="显示密码" title="显示密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <div class="password-rules" id="regPasswordRules" aria-live="polite"><div class="password-rules-title">密码要求：至少8位，且需包含大写字母、小写字母、数字、特殊字符中至少两类</div><span class="password-rule" data-password-rule="length">至少8位</span><span class="password-rule" data-password-rule="categories">四类中至少两类</span></div>
+      </div>
+      <div class="form-group">
+        <label for="regConfirmPassword">确认密码</label>
+        <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><input type="password" id="regConfirmPassword" placeholder="再次输入密码" autocomplete="new-password" /><button type="button" class="password-toggle" data-password-toggle="regConfirmPassword" aria-label="显示密码" title="显示密码"><svg class="eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg><svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a18.4 18.4 0 0 1-3.1 3.8"/><path d="M6.2 6.2C3.5 8.2 2 12 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <div class="password-feedback" id="regConfirmFeedback" aria-live="polite"></div>
+      </div>
+      <div class="form-group">
+        <label for="regPasswordHint">密码提示 <span class="optional">（可选）</span></label>
+        <div class="input-wrapper"><span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-1.1.9-1.7 1.3-1.7 2.7"/><path d="M12 17h.01"/></svg></span><input type="text" id="regPasswordHint" maxlength="80" placeholder="用于登录时提示自己，可不填写" autocomplete="off" /></div>
+      </div>
+      <button type="submit" class="btn-login" id="btnRegister"><span class="spinner"></span><span class="btn-text">注 册</span></button>
+    </form>
+    <button type="button" class="mode-link" data-mode="password">已有账号？<span>返回登录</span></button>
+  </div>
+  </section>
+</div>
+<script src="./auth-helper.js?v=3"></script>
+<script>
+  const mobileLogin = new URLSearchParams(window.location.search).get('from') === 'mobile';
+  const loginHome = mobileLogin ? '/mobile/#/dashboard' : '/';
+  const passwordResetPath = mobileLogin ? '/password.html?force=1&from=mobile' : '/password.html?force=1';
+  if (mobileLogin) document.body.classList.add('zx-mobile-login');
+  const loginForm = document.getElementById('loginForm');
+  const btnLogin = document.getElementById('btnLogin');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const passwordHint = document.getElementById('passwordHint');
+  const savePasswordInput = document.getElementById('savePassword');
+  const registerPanel = document.getElementById('registerPanel');
+  const registerForm = document.getElementById('registerForm');
+  const btnRegister = document.getElementById('btnRegister');
+  const regPassword = document.getElementById('regPassword');
+  const regConfirmPassword = document.getElementById('regConfirmPassword');
+  const regConfirmFeedback = document.getElementById('regConfirmFeedback');
+  const loginContainer = document.getElementById('loginContainer');
+  const loginPanel = document.getElementById('loginPanel');
+  const forgotPassword = document.getElementById('forgotPassword');
+
+  if (ZhiXunAuth.isAuthenticated()) {
+    var authenticatedUser = ZhiXunAuth.getUser();
+    window.location.href = authenticatedUser && authenticatedUser.password_reset_required ? passwordResetPath : loginHome;
+  }
+
+  document.querySelectorAll('[data-mode]').forEach((tab) => tab.addEventListener('click', () => {
+    var loginMode = tab.dataset.mode;
+    var isRegister = loginMode === 'register';
+    loginPanel.classList.toggle('is-hidden', isRegister);
+    registerPanel.classList.toggle('show', isRegister);
+    loginContainer.classList.toggle('is-register', isRegister);
+    if (isRegister) hidePasswordHint();
+    hideMessages();
+  }));
+
+  let hintTimer = null;
+  let hintRequestId = 0;
+  const SAVED_LOGIN_KEY = 'zhixun_saved_login_v1';
+
+  usernameInput.addEventListener('input', function() {
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(loadPasswordHint, 350);
+  });
+  usernameInput.addEventListener('blur', function() {
+    clearTimeout(hintTimer);
+    loadPasswordHint();
+  });
+
+  function renderPasswordHelp(message, withResetButton) {
+    passwordHint.textContent = '';
+    var text = document.createElement('span');
+    text.className = 'password-help-text';
+    text.textContent = message;
+    passwordHint.appendChild(text);
+    if (withResetButton) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'password-reset-request';
+      button.textContent = '申请重置密码';
+      button.addEventListener('click', showPasswordResetForm);
+      passwordHint.appendChild(button);
+    }
+    passwordHint.classList.add('show');
+  }
+
+  function showPasswordResetForm() {
+    if (passwordHint.querySelector('.password-reset-form')) return;
+    var form = document.createElement('form');
+    form.className = 'password-reset-form';
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'reset-username';
+    input.placeholder = '请输入需要重置密码的用户名';
+    input.autocomplete = 'username';
+    input.value = usernameInput.value.trim();
+    input.required = true;
+    var submit = document.createElement('button');
+    submit.type = 'submit';
+    submit.className = 'password-reset-submit';
+    submit.textContent = '提交申请';
+    var status = document.createElement('span');
+    status.className = 'password-reset-status';
+    form.append(input, submit, status);
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      var username = input.value.trim();
+      if (!username) { status.textContent = '请输入用户名'; input.focus(); return; }
+      submit.disabled = true;
+      status.textContent = '';
+      try {
+        var resp = await fetch('/api/auth/password-reset-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: username }) });
+        var data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || '申请提交失败');
+        renderPasswordHelp(data.message || '申请已提交，请联系系统管理员处理', false);
+      } catch (error) {
+        status.textContent = error.message || '申请提交失败';
+        submit.disabled = false;
+      }
+    });
+    passwordHint.appendChild(form);
+    input.focus();
+  }
+
+  async function loadPasswordHint() {
+    var username = usernameInput.value.trim();
+    var requestId = ++hintRequestId;
+    if (!username) return hidePasswordHint();
+    try {
+      var resp = await fetch('/api/auth/password-hint?username=' + encodeURIComponent(username));
+      var data = await resp.json();
+      if (requestId !== hintRequestId || username !== usernameInput.value.trim()) return;
+      if (resp.ok && data.hint) {
+        renderPasswordHelp('密码提示：' + data.hint, true);
+      } else {
+        hidePasswordHint();
+      }
+    } catch (error) {
+      hidePasswordHint();
+    }
+  }
+
+  function hidePasswordHint() {
+    passwordHint.textContent = '';
+    passwordHint.classList.remove('show');
+  }
+
+  async function showPasswordHelp() {
+    clearTimeout(hintTimer);
+    if (!usernameInput.value.trim()) {
+      renderPasswordHelp('如需找回密码，请先提交重置申请', true);
+      return;
+    }
+    await loadPasswordHint();
+    if (!usernameInput.value.trim()) {
+      renderPasswordHelp('如需找回密码，请先提交重置申请', true);
+    } else if (!passwordHint.classList.contains('show')) {
+      renderPasswordHelp('', true);
+    }
+  }
+
+  forgotPassword.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    showPasswordHelp();
+  });
+  forgotPassword.addEventListener('keydown', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    showPasswordHelp();
+  });
+
+  function restoreSavedLogin() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(SAVED_LOGIN_KEY) || 'null');
+      if (!saved || typeof saved.username !== 'string' || typeof saved.password !== 'string' || !saved.username || !saved.password) return;
+      usernameInput.value = saved.username;
+      passwordInput.value = saved.password;
+      savePasswordInput.checked = true;
+      loadPasswordHint();
+    } catch (_) {
+      localStorage.removeItem(SAVED_LOGIN_KEY);
+    }
+  }
+
+  restoreSavedLogin();
+
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); hideMessages();
+    const identifier = usernameInput.value.trim();
+    const payload = { username: identifier, password: passwordInput.value };
+    if (!savePasswordInput.checked) localStorage.removeItem(SAVED_LOGIN_KEY);
+    if (!identifier || !payload.password) return showError('请输入用户名和密码');
+    setLoading(true);
+    try {
+      const resp = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '登录失败，请重试');
+      if (savePasswordInput.checked) localStorage.setItem(SAVED_LOGIN_KEY, JSON.stringify({ username: identifier, password: payload.password }));
+      ZhiXunAuth.setSession(data.token, data.user); window.location.href = data.must_change_password ? passwordResetPath : loginHome;
+    } catch (error) { showError(error.message); setLoading(false); }
+  });
+
+  // ====== 注册提交 ======
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); hideMessages();
+    var username = document.getElementById('regUsername').value.trim();
+    var displayName = document.getElementById('regDisplayName').value.trim();
+    var password = document.getElementById('regPassword').value;
+    var confirmPassword = document.getElementById('regConfirmPassword').value;
+    var passwordHintValue = document.getElementById('regPasswordHint').value.trim();
+
+    if (!username) return showError('请输入用户名');
+    if (passwordHintValue.length > 80) return showError('密码提示不能超过80个字符');
+    var passwordValidation = getPasswordValidation(password);
+    if (!passwordValidation.valid) return showError('密码需至少8位，且包含大写字母、小写字母、数字、特殊字符中至少两类');
+    if (password !== confirmPassword) return showError('两次输入的密码不一致');
+
+    setRegisterLoading(true);
+    try {
+      var resp = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: username, password: password, confirm_password: confirmPassword, display_name: displayName || undefined, password_hint: passwordHintValue || undefined }) });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '注册失败');
+      ZhiXunAuth.setSession(data.token, data.user);
+      window.location.href = loginHome;
+    } catch (error) { showError(error.message); setRegisterLoading(false); }
+  });
+
+  document.querySelectorAll('[data-password-toggle]').forEach(function(toggle) {
+    toggle.addEventListener('click', function() {
+      var input = document.getElementById(toggle.dataset.passwordToggle);
+      if (!input) return;
+      var visible = input.type === 'password';
+      input.type = visible ? 'text' : 'password';
+      toggle.classList.toggle('is-visible', visible);
+      toggle.setAttribute('aria-label', visible ? '隐藏密码' : '显示密码');
+      toggle.title = visible ? '隐藏密码' : '显示密码';
+    });
+  });
+
+  function getPasswordValidation(password) {
+    var checks = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[^A-Za-z0-9]/.test(password)
+    };
+    var categories = [checks.uppercase, checks.lowercase, checks.number, checks.special].filter(Boolean).length;
+    return { valid: checks.length && categories >= 2, length: checks.length, categories: categories >= 2 };
+  }
+
+  function updatePasswordRule(rule, valid, hasValue) {
+    rule.classList.toggle('is-valid', hasValue && valid);
+    rule.classList.toggle('is-invalid', hasValue && !valid);
+  }
+
+  function syncRegisterPasswordValidation() {
+    var validation = getPasswordValidation(regPassword.value);
+    var hasPassword = regPassword.value.length > 0;
+    updatePasswordRule(document.querySelector('[data-password-rule="length"]'), validation.length, hasPassword);
+    updatePasswordRule(document.querySelector('[data-password-rule="categories"]'), validation.categories, hasPassword);
+    var hasConfirmation = regConfirmPassword.value.length > 0;
+    regConfirmFeedback.classList.remove('is-valid', 'is-invalid');
+    if (!hasConfirmation) {
+      regConfirmFeedback.textContent = '';
+    } else if (regPassword.value !== regConfirmPassword.value) {
+      regConfirmFeedback.textContent = '两次输入的密码不一致';
+      regConfirmFeedback.classList.add('is-invalid');
+    } else {
+      regConfirmFeedback.textContent = '两次输入的密码一致';
+      regConfirmFeedback.classList.add('is-valid');
+    }
+    btnRegister.disabled = !(validation.valid && regPassword.value === regConfirmPassword.value && hasConfirmation);
+  }
+
+  regPassword.addEventListener('input', syncRegisterPasswordValidation);
+  regConfirmPassword.addEventListener('input', syncRegisterPasswordValidation);
+  syncRegisterPasswordValidation();
+
+  function setRegisterLoading(loading) { btnRegister.classList.toggle('loading', loading); if (loading) btnRegister.disabled = true; else syncRegisterPasswordValidation(); }
+
+  function setLoading(loading) { btnLogin.classList.toggle('loading', loading); btnLogin.disabled = loading; }
+  function showError(message) { errorMsg.textContent = message; errorMsg.classList.add('show'); successMsg.classList.remove('show'); }
+  function showSuccess(message) { successMsg.textContent = message; successMsg.classList.add('show'); errorMsg.classList.remove('show'); }
+  function hideMessages() { errorMsg.classList.remove('show'); successMsg.classList.remove('show'); }
+</script>
+</body>
+</html>

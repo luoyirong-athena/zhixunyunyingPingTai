@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 280px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-size: 13px;
+      color: #333;
+    }
+    h3 {
+      margin: 0 0 12px;
+      color: #315efb;
+      font-size: 15px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #555;
+      font-size: 12px;
+    }
+    input {
+      width: 100%;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      height: 36px;
+      background: #315efb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    button:hover { background: #254fe0; }
+    .tip {
+      font-size: 11px;
+      color: #999;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .status {
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .status.ok { background: #e9fbf3; color: #078052; }
+    .status.err { background: #fff0f0; color: #d9363e; }
+  </style>
+</head>
+<body>
+  <h3>📋 抖音客户采集</h3>
+    <label>CRM 地址</label>
+    <input type="text" id="crmUrl" placeholder="http://localhost:3317" />
+    <label>登录 Token</label>
+    <input type="password" id="crmToken" placeholder="从 CRM 登录后复制 Token" />
+  <button id="btnSave">保存</button>
+  <div class="tip">在抖音用户主页右下角点击「📋 采集到CRM」即可采集</div>
+  <div class="status" id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>

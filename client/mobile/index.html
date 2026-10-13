@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#315efb">
+  <title>志询 · 移动运营平台</title>
+  <link rel="stylesheet" href="../one-stop.css?v=20260924-025">
+  <link rel="stylesheet" href="../zx-pet.css?v=20260909-001">
+  <link rel="stylesheet" href="./styles.css?v=20261010-001">
+</head>
+<body class="zx-mobile-layout">
+  <div id="root" class="zx-mobile-root"></div>
+  <script>
+    (function () {
+      if (!window.MutationObserver || window.__zxMobileSafeMutationObserver) return;
+      var nativeObserve = window.MutationObserver.prototype.observe;
+      window.MutationObserver.prototype.observe = function (target, options) {
+        if (!target || typeof target.nodeType !== 'number') return;
+        return nativeObserve.call(this, target, options);
+      };
+      window.__zxMobileSafeMutationObserver = true;
+    }());
+  </script>
+  <script src="../auth-helper.js?v=3"></script>
+  <script src="./app.js?v=20261010-008"></script>
+</body>
+</html>
