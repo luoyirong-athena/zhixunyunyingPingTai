@@ -90,7 +90,9 @@
   <script>
     (function () {
       'use strict';
-      var HOME = '/mobile/#/dashboard';
+      // Return to the single H5 entry; the workbench initializes its default
+      // dashboard route after the session has been stored.
+      var HOME = '/mobile/';
       var PASSWORD = '/password.html?force=1&from=mobile';
       var message = document.getElementById('message');
       var loginPanel = document.getElementById('loginPanel');
