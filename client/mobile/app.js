@@ -2,7 +2,8 @@
   'use strict';
 
   if (!window.ZhiXunAuth?.isAuthenticated?.()) {
-    window.location.replace('./login.html');
+    // Keep the H5 entry self-contained even when opened without a trailing slash.
+    window.location.replace('/mobile/login.html');
     return;
   }
 

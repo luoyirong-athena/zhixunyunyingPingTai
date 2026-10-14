@@ -57,7 +57,9 @@ app.use(helmet({
       objectSrc: ["'none'"],
       // The desktop H5 preview embeds this same local origin in development.
       // Production remains non-embeddable.
-      frameSrc: isProduction ? ["'none'"] : ["'self'"],
+      // The H5 shell uses a same-origin phone-width iframe on desktop browsers.
+      // Keep external framing blocked while allowing this internal preview.
+      frameSrc: ["'self'"],
       // A phone reaches the local development server over plain HTTP.  Helmet
       // enables this directive by default, which would rewrite every H5 asset
       // URL to HTTPS even though this development server has no TLS endpoint.
