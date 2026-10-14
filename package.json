@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cd server && node src/index.js",
     "start": "cd server && node src/index.js",
-    "vercel-build": "node scripts/build-vercel.js"
+    "vercel-build": "node scripts/build-vercel.js",
+    "postinstall": "npm --prefix server ci"
   }
 }
